@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  stayrtr:
+    image: rpki/stayrtr:latest
+    container_name: stayrtr
+    command:
+      - -cache
+      - /app/data/rpki.json
+      - -bind
+      - :8283
+      - -tls.key
+      - /app/data/keys/private.pem
+      - -tls.cert
+      - /app/data/keys/server.pem
+      - -checktime=false
+    ports:
+      - "8283:8283"
+    volumes:
+      - ./stayrtr/data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8283"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gobgp-router:
+    build: ./gobgp
+    container_name: gobgp-router
+    privileged: true
+    depends_on:
+      - stayrtr
