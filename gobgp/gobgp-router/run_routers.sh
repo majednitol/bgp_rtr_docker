@@ -15,15 +15,24 @@ fi
 
 # List of IPs to assign
 ips=(
-  "209.55.246.1/32"   # Router1 local
-  "34.190.208.1/32"   # Router2 local
-  "107.202.0.1/32"    # Router3 local
-  "138.0.40.1/32"     # Router4 local
-  "156.243.83.1/32"   # Router4 neighbor
-  "142.250.0.1/32"    # Router2 neighbor
-  "45.192.224.1/32"   # Router1 neighbor
+  "209.55.246.1/32"
+  "34.190.208.1/32"
+  "107.202.0.1/32"
+  "138.0.40.1/32"
+  "190.151.64.1/32"
+  "189.0.32.1/32"
+  "153.112.201.1/32"
+  "83.234.128.1/32"
+  "82.27.105.1/32"
+  "41.182.0.1/32"
+  "102.135.189.1/32"
+  "41.228.48.1/32"
+  "41.173.214.1/32"
+  "123.49.32.1/32"
+  "115.112.0.1/32"
+  "82.21.134.1/32"
+  "110.33.21.1/32"
 )
-
 
 for ip in "${ips[@]}"; do
   if ! ip addr show dummy0 | grep -qw "${ip%/*}"; then
@@ -53,27 +62,27 @@ sleep 10  # Ensure gobgpd instances are up before injecting routes
 echo "Injecting static routes..."
 
 # --- Router1 (AS 13335) ---
-# echo "→ Router1 (AS 13335)"
-# gobgp -p 50051 global rib add 45.192.224.0/24 bgpsec
-# gobgp -p 50051 global rib add 156.243.83.0/24 bgpsec
-# gobgp -p 50051 global rib add 209.55.246.0/23 bgpsec
+echo "→ Router1 (AS 13335)"
+gobgp -p 50051 global rib add 45.192.224.0/24 bgpsec
+gobgp -p 50051 global rib add 156.243.83.0/24 bgpsec
+gobgp -p 50051 global rib add 209.55.246.0/23 bgpsec
 
-# # --- Router2 (AS 15169) ---
-# echo "→ Router2 (AS 15169)"
-# gobgp -p 50052 global rib add 45.192.224.0/24 bgpsec
-# gobgp -p 50052 global rib add 142.250.0.0/15 bgpsec
-# gobgp -p 50052 global rib add 199.36.154.0/23 bgpsec
+# --- Router2 (AS 15169) ---
+echo "→ Router2 (AS 15169)"
+gobgp -p 50052 global rib add 45.192.224.0/24 bgpsec
+gobgp -p 50052 global rib add 142.250.0.0/15 bgpsec
+gobgp -p 50052 global rib add 199.36.154.0/23 bgpsec
 
-# # --- Router3 (AS 7018) ---
-# echo "→ Router3 (AS 7018)"
-# gobgp -p 50053 global rib add 142.250.0.0/15 bgpsec
-# gobgp -p 50053 global rib add 107.202.0.0/18 bgpsec
-# gobgp -p 50053 global rib add 209.55.246.0/23 bgpsec
+# --- Router3 (AS 7018) ---
+echo "→ Router3 (AS 7018)"
+gobgp -p 50053 global rib add 142.250.0.0/15 bgpsec
+gobgp -p 50053 global rib add 107.202.0.0/18 bgpsec
+gobgp -p 50053 global rib add 209.55.246.0/23 bgpsec
 
-# # # --- Router4 (AS 52320) ---
-# echo "→ Router4 (AS 52320)"
-# gobgp -p 50054 global rib add 200.16.68.0/22 bgpsec
-# gobgp -p 50054 global rib add 156.243.83.0/24 bgpsec
+# # --- Router4 (AS 52320) ---
+echo "→ Router4 (AS 52320)"
+gobgp -p 50054 global rib add 200.16.68.0/22 bgpsec
+gobgp -p 50054 global rib add 156.243.83.0/24 bgpsec
 # gobgp -p 50054 global rib add 209.55.246.0/23 bgpsec
 
 # # --- Router5 (AS 6471) ---
